@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:quiz_app/answer_button.dart';
+import 'package:quiz_app/data/questions.dart';
 
 class QuestionsScreen extends StatefulWidget {
-  const QuestionsScreen({super.key});
+  const QuestionsScreen({
+    super.key,
+    required this.onSelectAnswer,
+  });
+
+  final void Function(String answer) onSelectAnswer;
+
   @override
   State<QuestionsScreen> createState() {
     return _QuistionsScreenState();
@@ -10,33 +18,48 @@ class QuestionsScreen extends StatefulWidget {
 }
 
 class _QuistionsScreenState extends State<QuestionsScreen> {
+  var currentQuestionIndex = 0;
+
+  void answerQuestion(String selectedAnswers) {
+    widget.onSelectAnswer('...');
+    setState(() {
+      currentQuestionIndex++;
+    });
+  }
+
   @override
   Widget build(context) {
+    final currentQuestion = questions[currentQuestionIndex];
     return SizedBox(
       width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text(
-            'ques',
-            style: TextStyle(
-              color: Colors.white,
+      child: Container(
+        margin: const EdgeInsets.all(40),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              currentQuestion.text,
+              style: GoogleFonts.lato(
+                color: const Color.fromARGB(255, 201, 153, 251),
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
             ),
-          ),
-          const SizedBox(height: 30),
-          AnswerButton(
-            answerText: 'Answer 1',
-            onTap: () {},
-          ),
-          AnswerButton(
-            answerText: 'Answer 2',
-            onTap: () {},
-          ),
-          AnswerButton(
-            answerText: 'Answer 3',
-            onTap: () {},
-          ),
-        ],
+            const SizedBox(height: 30),
+            ...currentQuestion.answers.map(
+              (answer) {
+                return AnswerButton(
+                  answerText: answer,
+                  onTap: () {
+                    answerQuestion(answer);
+                  },
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
