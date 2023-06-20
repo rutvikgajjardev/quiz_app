@@ -21,7 +21,7 @@ class _QuistionsScreenState extends State<QuestionsScreen> {
   var currentQuestionIndex = 0;
 
   void answerQuestion(String selectedAnswers) {
-    widget.onSelectAnswer('...');
+    widget.onSelectAnswer(selectedAnswers);
     setState(() {
       currentQuestionIndex++;
     });
@@ -48,7 +48,7 @@ class _QuistionsScreenState extends State<QuestionsScreen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 30),
-            ...currentQuestion.answers.map(
+            ...currentQuestion.suffeledAnswers.map(
               (answer) {
                 return AnswerButton(
                   answerText: answer,
